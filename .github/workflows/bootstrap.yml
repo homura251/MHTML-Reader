@@ -25,13 +25,13 @@ jobs:
           mkdir -p /tmp/mhtml-reader-src
           unzip -q /tmp/mhtml-reader.zip -d /tmp/mhtml-reader-src
           test -f /tmp/mhtml-reader-src/MhtmlLens/settings.gradle.kts
-          test -f /tmp/mhtml-reader-src/MhtmlLens/.github/workflows/android-ci.yml
+          test -f /tmp/mhtml-reader-src/MhtmlLens/app/src/main/AndroidManifest.xml
 
       - name: Restore project tree
         shell: bash
         run: |
           set -euo pipefail
-          rsync -a --delete --exclude '.git/' /tmp/mhtml-reader-src/MhtmlLens/ ./
+          rsync -a --delete --exclude '.git/' --exclude '.github/workflows/' /tmp/mhtml-reader-src/MhtmlLens/ ./
           git status --short
 
       - name: Commit restored source
@@ -41,5 +41,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Add MHTML Reader Android app and CI"
+          git commit -m "Add MHTML Reader Android app"
           git push origin HEAD:main
