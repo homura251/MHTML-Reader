@@ -3,7 +3,6 @@ package com.example.mhtmllens.browser
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.net.Uri
-import android.util.Base64
 import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -203,13 +202,22 @@ private fun loadPartAsDocument(
         String(part.bytes, charset)
     }
     val utf8Html = forceUtf8Html(html)
-    val base64 = Base64.encodeToString(utf8Html.toByteArray(StandardCharsets.UTF_8), Base64.NO_WRAP)
+    val documentUrl = baseUrl
+        ?.takeIf {
+            val scheme = runCatching { Uri.parse(it).scheme?.lowercase(Locale.ROOT) }.getOrNull()
+            scheme == "http" || scheme == "https"
+        }
+        ?: "https://mhtml.invalid/"
+
+    // loadDataWithBaseURL expects the HTML string itself when baseUrl is HTTP(S).
+    // The encoding argument is ignored in that mode, so passing Base64 here would
+    // make WebView display encoded/plain text instead of rendering the document.
     webView.loadDataWithBaseURL(
-        baseUrl ?: "https://mhtml.invalid/",
-        base64,
+        documentUrl,
+        utf8Html,
         "text/html",
-        "base64",
-        null
+        null,
+        documentUrl
     )
 }
 
