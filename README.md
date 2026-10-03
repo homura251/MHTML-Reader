@@ -54,11 +54,11 @@ app/src/main/java/com/example/mhtmllens/
 
 - Android Studio 2026.x
 - JDK 17 或更高
-- Android SDK 37
+- Android SDK 36
 - Android Gradle Plugin 9.2.0
 - Gradle 9.4.1
 - Kotlin 2.2.10
-- Compose BOM 2026.09.00
+- Compose BOM 2026.06.00
 - Material 3 1.4.0
 
 仓库包含 `gradle-wrapper.properties`，但当前没有提交 Gradle wrapper JAR。GitHub Actions 使用 `gradle/actions/setup-gradle` 固定安装 Gradle 9.4.1，因此 CI 不依赖 wrapper；本地可直接用 Android Studio，或者安装 Gradle 后运行：
@@ -76,7 +76,7 @@ app/build/outputs/apk/debug/app-debug.apk
 
 ## GitHub Actions
 
-`.github/workflows/android-ci.yml` 会在 `main` 分支 Push、Pull Request 和手动触发时运行：安装 JDK 17、Gradle 9.4.1、Android SDK 37，执行 `:app:testDebugUnitTest` 和 `:app:assembleDebug`，并把 debug APK 作为 Actions Artifact 保存 14 天。
+`.github/workflows/android-ci.yml` 会在 `main` 分支 Push、Pull Request 和手动触发时运行：安装 JDK 17、Gradle 9.4.1、Android SDK 36，执行 `:app:testDebugUnitTest` 和 `:app:assembleDebug`，并把 debug APK 作为 Actions Artifact 保存 14 天。
 
 单元测试包含无后缀 Blink MHTML 内容识别，以及 quoted-printable UTF-8 中文防 mojibake 回归测试。
 
