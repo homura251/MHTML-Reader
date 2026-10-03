@@ -43,6 +43,7 @@ fun ArchiveWebView(
     AndroidView(
         modifier = modifier,
         factory = { context ->
+            val scriptsEnabled = javaScriptEnabled
             WebView(context).apply {
                 layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -50,8 +51,8 @@ fun ArchiveWebView(
                 )
                 setBackgroundColor(Color.TRANSPARENT)
                 settings.apply {
-                    javaScriptEnabled = javaScriptEnabled
-                    domStorageEnabled = javaScriptEnabled
+                    this.javaScriptEnabled = scriptsEnabled
+                    domStorageEnabled = scriptsEnabled
                     allowFileAccess = false
                     allowContentAccess = false
                     setSupportZoom(true)
