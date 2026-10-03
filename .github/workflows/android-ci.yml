@@ -48,6 +48,15 @@ jobs:
           yes | "$SDKMANAGER" --licenses >/dev/null || true
           "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0"
 
+      - name: Restore selected app icon
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p app/src/main/res/drawable-nodpi
+          cat .github/assets/app_icon_*.b64 | tr -d '\n' | base64 --decode > app/src/main/res/drawable-nodpi/ic_launcher_art.webp
+          test -s app/src/main/res/drawable-nodpi/ic_launcher_art.webp
+          file app/src/main/res/drawable-nodpi/ic_launcher_art.webp
+
       - name: Unit tests and debug build
         run: gradle --no-daemon --stacktrace :app:testDebugUnitTest :app:assembleDebug
 
@@ -89,5 +98,9 @@ jobs:
             gh release upload "$RELEASE_TAG" "$RELEASE_APK" --clobber
             gh release edit "$RELEASE_TAG" --title "$TITLE" --prerelease --notes "$NOTES"
           else
-            gh release create "$RELEASE_TAG" "$RELEASE_APK"               --target "$GITHUB_SHA"               --title "$TITLE"               --notes "$NOTES"               --prerelease
+            gh release create "$RELEASE_TAG" "$RELEASE_APK" \
+              --target "$GITHUB_SHA" \
+              --title "$TITLE" \
+              --notes "$NOTES" \
+              --prerelease
           fi
