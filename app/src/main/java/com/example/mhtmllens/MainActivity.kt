@@ -104,6 +104,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mhtmllens.browser.ArchiveWebView
+import com.example.mhtmllens.model.ArchiveFormat
 import com.example.mhtmllens.model.ArchiveItem
 import com.example.mhtmllens.ui.theme.MhtmlLensTheme
 import kotlinx.coroutines.launch
@@ -257,9 +258,9 @@ private fun LibraryScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("MHTML Lens", style = MaterialTheme.typography.titleLarge)
+                        Text("MHTML Reader", style = MaterialTheme.typography.titleLarge)
                         Text(
-                            "按内容识别 · 不依赖后缀",
+                            "MHTML / HTML · 按内容识别",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -330,7 +331,7 @@ private fun LibraryScreen(
                         FilterChip(
                             selected = filter == LibraryFilter.NAMED,
                             onClick = { filter = LibraryFilter.NAMED },
-                            label = { Text("MHTML 后缀") }
+                            label = { Text("有后缀") }
                         )
                     }
                 }
@@ -399,9 +400,9 @@ private fun SummaryCard(
                         if (permissionRequired) {
                             "Android 11+ 需要“所有文件访问”才能自动发现 Chrome 保存的无后缀网页。"
                         } else if (checked > 0) {
-                            "已检查 $checked 个文件，只收录 MIME 内容确认为 MHTML 的项目。"
+                            "已检查 $checked 个文件；未变化文件使用本地索引，不重复读取内容。"
                         } else {
-                            "扫描文件内容，不靠 .mhtml / .mht 扩展名。"
+                            "支持 MHTML、HTML 和无后缀网页文件；结果会保存在本地索引。"
                         },
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f)
@@ -483,7 +484,12 @@ private fun ArchiveRow(item: ArchiveItem, loading: Boolean, onClick: () -> Unit)
                     overflow = TextOverflow.Ellipsis
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    StatusPill(if (item.hasExtension) "MHTML" else "无后缀")
+                    StatusPill(
+                        when (item.format) {
+                            ArchiveFormat.MHTML -> if (item.hasExtension) "MHTML" else "MHTML · 无后缀"
+                            ArchiveFormat.HTML -> if (item.hasExtension) "HTML" else "HTML · 无后缀"
+                        }
+                    )
                     Text(
                         "${formatBytes(item.sizeBytes)} · ${formatDate(item.modifiedMillis)}",
                         style = MaterialTheme.typography.labelSmall,
@@ -524,11 +530,11 @@ private fun EmptyLibrary(hasAny: Boolean, onPickFile: () -> Unit) {
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            if (hasAny) "没有匹配的存档" else "还没有发现 MHTML",
+            if (hasAny) "没有匹配的网页" else "还没有发现离线网页",
             style = MaterialTheme.typography.titleMedium
         )
         Text(
-            if (hasAny) "换个关键词或筛选条件。" else "可以扫描 Downloads，也可以直接打开一个无后缀文件。",
+            if (hasAny) "换个关键词或筛选条件。" else "可以扫描 Downloads，也可以直接打开 MHTML / HTML / 无后缀网页文件。",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -592,7 +598,7 @@ private fun ReaderScreen(
                                 overflow = TextOverflow.Ellipsis
                             )
                             Text(
-                                sourceHost(archive.rootUrl) ?: "离线 MHTML",
+                                sourceHost(archive.rootUrl) ?: if (loaded.item.format == ArchiveFormat.HTML) "离线 HTML" else "离线 MHTML",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 maxLines = 1,
