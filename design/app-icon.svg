@@ -1,0 +1,22 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Material adaptive-icon foreground source.
+       Keep all important artwork inside the central safe zone so Android can
+       crop it as a circle, rounded square, squircle, etc. -->
+  <g>
+    <!-- document -->
+    <path d="M320 214C320 181.967 345.967 156 378 156H586L724 294V732C724 764.033 698.033 790 666 790H378C345.967 790 320 764.033 320 732V214Z" fill="white"/>
+    <path d="M586 156V252C586 284.033 611.967 310 644 310H724L586 156Z" fill="#D9E2FF"/>
+
+    <!-- subtle document lines -->
+    <path d="M390 350H568" stroke="#6750A4" stroke-width="34" stroke-linecap="round"/>
+    <path d="M390 416H522" stroke="#6750A4" stroke-width="34" stroke-linecap="round"/>
+
+    <!-- globe badge -->
+    <circle cx="628" cy="618" r="142" fill="white"/>
+    <circle cx="628" cy="618" r="116" stroke="#6750A4" stroke-width="34"/>
+    <path d="M628 502C587 535 566 576 566 618C566 660 587 701 628 734" stroke="#6750A4" stroke-width="30" stroke-linecap="round"/>
+    <path d="M628 502C669 535 690 576 690 618C690 660 669 701 628 734" stroke="#6750A4" stroke-width="30" stroke-linecap="round"/>
+    <path d="M526 584C558 596 592 602 628 602C664 602 698 596 730 584" stroke="#6750A4" stroke-width="30" stroke-linecap="round"/>
+    <path d="M526 652C558 640 592 634 628 634C664 634 698 640 730 652" stroke="#6750A4" stroke-width="30" stroke-linecap="round"/>
+  </g>
+</svg>
