@@ -96,6 +96,50 @@ object MhtmlParser {
         )
     }
 
+
+    fun parseHtml(bytes: ByteArray, baseUrl: String? = null, fallbackTitle: String = "HTML document"): Archive {
+        val charset = detectCharset(null, bytes, "text/html")
+        val html = decodeText(bytes, charset)
+        val title = extractTitle(html).ifBlank { fallbackTitle }
+        val root = Part(
+            mimeType = "text/html",
+            charsetName = charset.name(),
+            contentLocation = baseUrl,
+            contentId = null,
+            bytes = bytes,
+            headers = mapOf("content-type" to "text/html; charset=${charset.name()}")
+        )
+        val aliases = linkedMapOf<String, Part>()
+        if (!baseUrl.isNullOrBlank()) addAlias(aliases, baseUrl, root)
+        return Archive(
+            root = root,
+            rootHtml = html,
+            rootCharset = charset.name(),
+            rootUrl = baseUrl,
+            title = title,
+            subject = null,
+            snapshotUrl = null,
+            parts = listOf(root),
+            aliases = aliases
+        )
+    }
+
+    fun looksLikeHtml(prefix: ByteArray): Boolean {
+        if (prefix.isEmpty()) return false
+        val probe = prefix.copyOfRange(0, minOf(prefix.size, 64 * 1024))
+            .toString(StandardCharsets.ISO_8859_1)
+            .trimStart('\uFEFF', ' ', '\t', '\r', '\n')
+            .lowercase(Locale.ROOT)
+        if (probe.startsWith("<!doctype html") || probe.startsWith("<html")) return true
+        return probe.contains("<html") && (probe.contains("<head") || probe.contains("<body"))
+    }
+
+    fun previewHtmlTitle(prefix: ByteArray): String? {
+        if (!looksLikeHtml(prefix)) return null
+        val charset = detectCharset(null, prefix, "text/html")
+        return extractTitle(decodeText(prefix, charset)).takeIf { it.isNotBlank() }
+    }
+
     fun looksLikeMhtml(prefix: ByteArray): Boolean {
         if (prefix.isEmpty()) return false
         val ascii = prefix.toString(StandardCharsets.ISO_8859_1)
