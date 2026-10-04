@@ -1,29 +1,32 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
+    android:viewportWidth="108"
+    android:viewportHeight="108">
 
+    <!-- Important artwork stays inside Android's adaptive-icon safe zone. -->
     <path
         android:fillColor="#FFFFFFFF"
-        android:pathData="M6,2h8l4,4v14c0,1.1 -0.9,2 -2,2H6c-1.1,0 -2,-0.9 -2,-2V4c0,-1.1 0.9,-2 2,-2z" />
+        android:pathData="M34,22C34,18.686 36.686,16 40,16H61L75,30V76C75,79.314 72.314,82 69,82H40C36.686,82 34,79.314 34,76V22Z" />
 
     <path
-        android:fillColor="#FFC9C6FF"
-        android:pathData="M14,2v4h4z" />
+        android:fillColor="#FFD9E2FF"
+        android:pathData="M61,16V25C61,28.314 63.686,31 67,31H75L61,16Z" />
 
     <path
-        android:fillColor="#FF5B5BD6"
-        android:pathData="M7,9h7v1.6H7zM7,12h5v1.6H7z" />
+        android:fillColor="#FF6750A4"
+        android:pathData="M41,36H59C60.105,36 61,36.895 61,38C61,39.105 60.105,40 59,40H41C39.895,40 39,39.105 39,38C39,36.895 39.895,36 41,36ZM41,43H54C55.105,43 56,43.895 56,45C56,46.105 55.105,47 54,47H41C39.895,47 39,46.105 39,45C39,43.895 39.895,43 41,43Z" />
 
+    <!-- Globe white backing keeps the badge legible on any system mask/background. -->
     <path
         android:fillColor="#FFFFFFFF"
-        android:pathData="M17.5,13C19.985,13 22,15.015 22,17.5C22,19.985 19.985,22 17.5,22C15.015,22 13,19.985 13,17.5C13,15.015 15.015,13 17.5,13z" />
+        android:pathData="M65,50C73.284,50 80,56.716 80,65C80,73.284 73.284,80 65,80C56.716,80 50,73.284 50,65C50,56.716 56.716,50 65,50Z" />
 
     <path
         android:fillColor="#00000000"
-        android:strokeColor="#FF5B5BD6"
-        android:strokeWidth="0.85"
+        android:strokeColor="#FF6750A4"
+        android:strokeWidth="3.6"
         android:strokeLineCap="round"
-        android:pathData="M14.4,17.5H20.6M17.5,14.35C16.55,15.2 16.05,16.35 16.05,17.5C16.05,18.65 16.55,19.8 17.5,20.65M17.5,14.35C18.45,15.2 18.95,16.35 18.95,17.5C18.95,18.65 18.45,19.8 17.5,20.65M14.65,16.15C16.4,16.75 18.6,16.75 20.35,16.15M14.65,18.85C16.4,18.25 18.6,18.25 20.35,18.85" />
+        android:strokeLineJoin="round"
+        android:pathData="M65,53C71.627,53 77,58.373 77,65C77,71.627 71.627,77 65,77C58.373,77 53,71.627 53,65C53,58.373 58.373,53 65,53ZM65,53C60.8,56.4 59,60.5 59,65C59,69.5 60.8,73.6 65,77M65,53C69.2,56.4 71,60.5 71,65C71,69.5 69.2,73.6 65,77M54,61.5C57.5,62.8 61.1,63.4 65,63.4C68.9,63.4 72.5,62.8 76,61.5M54,68.5C57.5,67.2 61.1,66.6 65,66.6C68.9,66.6 72.5,67.2 76,68.5" />
 </vector>
