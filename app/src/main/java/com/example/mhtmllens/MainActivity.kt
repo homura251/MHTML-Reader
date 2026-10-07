@@ -839,7 +839,7 @@ private fun ReaderSettingsSheet(
                 Column(Modifier.weight(1f)) {
                     Text("允许存档脚本", style = MaterialTheme.typography.titleMedium)
                     Text(
-                        "默认关闭。即使开启，未收录在 MHTML 内的网络请求仍会被拦截。",
+                        "默认关闭以减少离线存档执行脚本的风险。网页显示不全时可尝试开启；但如果图片、字体、iframe、接口数据或懒加载内容本来就没有被保存进 MHTML，开启脚本也无法补回，未收录的网络请求仍会被离线拦截。",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
