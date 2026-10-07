@@ -226,15 +226,29 @@ private fun loadPartAsDocument(
  * source bytes ourselves and re-emit a UTF-8 document with an explicit, first meta.
  */
 private fun forceUtf8Html(html: String): String {
-    val withoutCharsetMeta = html.replace(
-        Regex("<meta\\b[^>]*(?:charset\\s*=|http-equiv\\s*=\\s*['\"]?content-type)[^>]*>", RegexOption.IGNORE_CASE),
-        ""
-    )
+    val withoutConflictingMeta = html
+        .replace(
+            Regex("<meta\\b[^>]*(?:charset\\s*=|http-equiv\\s*=\\s*['\"]?content-type)[^>]*>", RegexOption.IGNORE_CASE),
+            ""
+        )
+        .replace(
+            // Saved single-file HTML can retain the live site's CSP. In an offline
+            // snapshot that policy can block inline styles/scripts and data:/blob:
+            // resources that are already embedded in the file. The viewer itself
+            // still blocks network access and keeps JavaScript off unless the user
+            // explicitly enables it, so preserving a page-authored CSP here hurts
+            // fidelity without adding a meaningful network boundary.
+            Regex(
+                "<meta\\b[^>]*http-equiv\\s*=\\s*(['\"]?)content-security-policy\\1[^>]*>",
+                RegexOption.IGNORE_CASE
+            ),
+            ""
+        )
     val head = Regex("<head\\b[^>]*>", RegexOption.IGNORE_CASE)
-    val match = head.find(withoutCharsetMeta)
+    val match = head.find(withoutConflictingMeta)
     return if (match != null) {
-        withoutCharsetMeta.replaceRange(match.range.last + 1, match.range.last + 1, "<meta charset=\"utf-8\">")
+        withoutConflictingMeta.replaceRange(match.range.last + 1, match.range.last + 1, "<meta charset=\"utf-8\">")
     } else {
-        "<meta charset=\"utf-8\">$withoutCharsetMeta"
+        "<meta charset=\"utf-8\">$withoutConflictingMeta"
     }
 }
