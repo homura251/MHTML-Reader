@@ -165,7 +165,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private enum class LibraryFilter { ALL, NO_EXTENSION, NAMED }
+private enum class LibraryFilter { ALL, MHTML, HTML, NO_EXTENSION, NAMED }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -232,6 +232,8 @@ private fun LibraryScreen(
         ui.archives.filter { item ->
             val matchesFilter = when (filter) {
                 LibraryFilter.ALL -> true
+                LibraryFilter.MHTML -> item.format == ArchiveFormat.MHTML
+                LibraryFilter.HTML -> item.format == ArchiveFormat.HTML
                 LibraryFilter.NO_EXTENSION -> !item.hasExtension
                 LibraryFilter.NAMED -> item.hasExtension
             }
@@ -317,12 +319,26 @@ private fun LibraryScreen(
                     )
 
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        val mhtmlCount = ui.archives.count { it.format == ArchiveFormat.MHTML }
+                        val htmlCount = ui.archives.count { it.format == ArchiveFormat.HTML }
+                        val noExt = ui.archives.count { !it.hasExtension }
+                        val namedCount = ui.archives.size - noExt
+
                         FilterChip(
                             selected = filter == LibraryFilter.ALL,
                             onClick = { filter = LibraryFilter.ALL },
                             label = { Text("全部 ${ui.archives.size}") }
                         )
-                        val noExt = ui.archives.count { !it.hasExtension }
+                        FilterChip(
+                            selected = filter == LibraryFilter.MHTML,
+                            onClick = { filter = LibraryFilter.MHTML },
+                            label = { Text("MHTML $mhtmlCount") }
+                        )
+                        FilterChip(
+                            selected = filter == LibraryFilter.HTML,
+                            onClick = { filter = LibraryFilter.HTML },
+                            label = { Text("HTML $htmlCount") }
+                        )
                         FilterChip(
                             selected = filter == LibraryFilter.NO_EXTENSION,
                             onClick = { filter = LibraryFilter.NO_EXTENSION },
@@ -331,7 +347,7 @@ private fun LibraryScreen(
                         FilterChip(
                             selected = filter == LibraryFilter.NAMED,
                             onClick = { filter = LibraryFilter.NAMED },
-                            label = { Text("有后缀") }
+                            label = { Text("有后缀 $namedCount") }
                         )
                     }
                 }
